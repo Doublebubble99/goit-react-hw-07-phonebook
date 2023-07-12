@@ -3,13 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import ContactItem from 'components/ContactItem';
 import { List, Button } from './ContactList.styled';
 import { contacts, filters } from 'redux/selectors';
-import { removeContact } from 'redux/contactsSlice/slice';
+import { deleteContact } from 'redux/operations';
 function ContactList() {
-  const contactsState = useSelector(contacts);
+  const { items } = useSelector(contacts);
   const filtersState = useSelector(filters);
   const dispatch = useDispatch();
   const filterNormalize = filtersState.toLowerCase();
-  const existingName = contactsState.filter(({ name }) => {
+  const existingName = items.filter(({ name }) => {
     return name.toLowerCase().includes(filterNormalize.trim());
   });
   return (
@@ -18,7 +18,7 @@ function ContactList() {
         <ContactItem name={name} key={id} number={number} id={id}>
           <Button
             type="button"
-            onClick={() => dispatch(removeContact(id))}
+            onClick={() => dispatch(deleteContact(id))}
             id={id}
           >
             Delete

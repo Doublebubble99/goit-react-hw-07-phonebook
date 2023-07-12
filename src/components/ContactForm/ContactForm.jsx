@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState } from 'react';
-import { nanoid } from 'nanoid';
+import { nanoid } from '@reduxjs/toolkit';
 import { useSelector, useDispatch } from 'react-redux';
 import { contacts } from 'redux/selectors';
-import { newContact } from 'redux/contactsSlice/slice';
+import { addContact } from 'redux/operations';
 import {
   Container,
   Title,
@@ -14,7 +14,7 @@ import {
   Wrapper,
 } from './ContactForm.styled';
 function ContactForm() {
-  const contactsState = useSelector(contacts);
+  const { items } = useSelector(contacts);
   const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
@@ -30,18 +30,13 @@ function ContactForm() {
     evt.preventDefault();
     const form = evt.currentTarget;
     form.reset();
-    const existingName = contactsState.find(contact => contact.name === name);
+    const existingName = items.find(contact => contact.name === name);
     if (existingName) {
       alert(`You already have ${name} in contacts!`);
       return;
     }
-    dispatch(
-      newContact({
-        number,
-        name,
-        id: nanoid(),
-      })
-    );
+    const id = nanoid();
+    dispatch(addContact({ number, name, id }));
   };
   return (
     <Container>
