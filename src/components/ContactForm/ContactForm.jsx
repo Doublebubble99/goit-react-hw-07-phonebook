@@ -28,8 +28,6 @@ function ContactForm() {
   };
   const onSubmit = evt => {
     evt.preventDefault();
-    const form = evt.currentTarget;
-    form.reset();
     const existingName = items.find(contact => contact.name === name);
     if (existingName) {
       alert(`You already have ${name} in contacts!`);
@@ -37,6 +35,8 @@ function ContactForm() {
     }
     const id = nanoid();
     dispatch(addContact({ number, name, id }));
+    setName('');
+    setNumber('');
   };
   return (
     <Container>
